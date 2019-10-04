@@ -13,6 +13,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 项目主文件，包含处理的整体逻辑
+ */
 public class DFrame {
     /**定义全局变量*/
     static GlobalRule GR = new GlobalRule(); // 一份家谱的规则集
@@ -27,7 +30,7 @@ public class DFrame {
         // 读取家谱文件
 //        String filename="/src/main/java/resources/jiaPuData/source/吴氏始祖至道二公世系谱.docx";
         String filename= dJiaFrame.getPath("jiaPuData/source")+"/吴氏始祖至道二公世系谱.docx";
-        jiapuString = dJiaFrame.ReadJiaPUFile(filename);
+        jiapuString = dJiaFrame.ReadJiaPuFile(filename);
 //        System.out.println("jiapuString: "+jiapuString);
         String[] jiapuList = jiapuString.split("\n");
         // 选取用于用户标注的文本
@@ -37,13 +40,13 @@ public class DFrame {
         labeledAttrMap = dJiaFrame.userIntelligence(labelText.get("labelString"));
 //        System.out.println("labeledAttrMap: "+labeledAttrMap);
         //根据用户标注信息，学习家谱文件规则
-        dJiaFrame.ruleLearning(labeledAttrMap);
+        dJiaFrame.ruleLearning(labelText.get("labelString"),labeledAttrMap);
         //家谱人物属性抽取
         dJiaFrame.atrrExactor(jiapuList);
     }
 
     /**读取家谱文件*/
-    private  String ReadJiaPUFile(String filename) {
+    private  String ReadJiaPuFile(String filename) {
         String buffer="";
 
         // 判断文件类型（doc\docx\txt）
@@ -157,8 +160,14 @@ public class DFrame {
         return attrMap;
     }
 
-    /**规则学习*/
-    private String ruleLearning(Map<String, String> labeledAttrMap) {
+    /**基本规则学习*/
+    private String autoRuleLearning() {
+        System.out.println("");
+        return "";  //返回属性提取规则集
+    }
+
+    /**根据用户标注信息，学习家谱文件规则*/
+    private String ruleLearning(String labelString, Map<String,String> labeledAttrMap) {
         System.out.println("");
         return "";  //返回属性提取规则集
     }

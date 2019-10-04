@@ -1,8 +1,12 @@
 package cn.edu.hfut.dmic;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * 家谱文件规则处理文件，包含对家谱中人物属性抽取的规则集
+ */
 public class GlobalRule {
     // 字辈，此处只给出了少数几个
     // 注意：每份家谱都不同，后面会考虑每份家谱都重新生成这个数组
@@ -15,6 +19,13 @@ public class GlobalRule {
     //孩子的排行，如长子，次子等
     String rankNum[] = {"零","长","次","三","四","五","六","七","八","九","十","十一","十二","十三","十四","十五","十六","十七","十八","十九","二十"};
 
+    Map<String,String> attrPatternSet = new HashMap<String, String>();  //存储提取家谱人物各属性值的规则集
+
+    /**构造函数*/
+    public GlobalRule(){
+        attrPatternSet.put("字", "字[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]");
+        attrPatternSet.put("号", "号[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]");
+    }
 
     /**获取当前部分人物在家谱中的代数，我们默认一份家谱不会有超过四十代的人数*/
     public int getGeneration(String line) {

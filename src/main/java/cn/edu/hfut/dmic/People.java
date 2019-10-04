@@ -69,8 +69,8 @@ public class People {
         }
     }
     //提取字
-    public void getCourtesyName(int i, String personinfo) {
-        String pattern = "字[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]";
+    public void getCourtesyName(int i, String personinfo, String pattern) {
+//        String pattern = "字[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(personinfo);
         while(m.find()) {
@@ -82,8 +82,8 @@ public class People {
         }
     }
     //提取号
-    public void getpesudonym(int i, String personinfo) {
-        String pattern = "号[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]";
+    public void getpesudonym(int i, String personinfo,String pattern) {
+//        String pattern = "号[\\u4E00-\\u9FA5][\\u4E00-\\u9FA5]";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(personinfo);
         while(m.find()) {
@@ -95,8 +95,8 @@ public class People {
         }
     }
     //提取农历出生日期
-    public void getBirthday(int i, String personinfo) {
-        String pattern = "\\S{0,5}年\\S{1,10}月\\S{1,10}生";
+    public void getBirthday(int i, String personinfo,String pattern) {
+//        String pattern = "\\S{0,5}年\\S{1,10}月\\S{1,10}生";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(personinfo);
         if(m.find()) {
@@ -106,8 +106,8 @@ public class People {
         }
     }
     //提取农历过世日期
-    public void getDeathdate(int i, String personinfo) {
-        String pattern = "\\S{1,4}年\\S{1,10}月\\S{1,10}公故";
+    public void getDeathdate(int i, String personinfo,String pattern) {
+//        String pattern = "\\S{1,4}年\\S{1,10}月\\S{1,10}公故";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(personinfo);
         if(m.find()) {
@@ -117,9 +117,9 @@ public class People {
         }
     }
     //提取葬于
-    public void getburied(int i, String personinfo) {
+    public void getburied(int i, String personinfo, String pattern) {
         if(personinfo.contains("公故葬")||personinfo.contains("公故 葬")) {
-            String pattern = "公故 *葬\\S{1,200}[ | |。]";
+            pattern = "公故 *葬\\S{1,200}[ | |。]";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(personinfo);
             if(m.find()) {
@@ -131,7 +131,7 @@ public class People {
                 buriedindex=personinfo.length();
             }
         }else {
-            String pattern = "公\\S{0,5}葬\\S{1,200} ";
+            pattern = "公\\S{0,5}葬\\S{1,200} ";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(personinfo);
             if(m.find()) {
@@ -246,13 +246,13 @@ public class People {
         return indexofRank;
     }
 
-    public int getWifeAndChildrenInfo(int TreeNUM, int personnum, People[] p) {
+    public int getWifeAndChildrenInfo(int TreeNUM, int personnum, People[] p,String pattern) {
 
         String wifeinfo = description;
         int k =0;	//记录妻子数
         int[] wifes = {0,0,0,0,0,0,0,0,0,0};	//记录第i个妻子描述信息出现在字符串中的位置
         int[] wifesid = {0,0,0,0,0,0,0,0,0,0};	//记录第i个妻子的编号
-        String pattern = "[续|又|再]{0,1}[娶|配|妣][^故|葬|合冢|生故未详|享寿].*?[女|氏|孺人]";
+//        String pattern = "[续|又|再]{0,1}[娶|配|妣][^故|葬|合冢|生故未详|享寿].*?[女|氏|孺人]";
         Pattern rPattern = Pattern.compile(pattern);
         Matcher m = rPattern.matcher(wifeinfo);
 
@@ -260,10 +260,11 @@ public class People {
             wifes[k] = m.start();
             if(k>0) {	//获取上一个妻子的属性信息及对应子女信息(若只有一位妻子这部分不执行)
                 String wifeAndChildren = wifeinfo.substring(wifes[k-1], wifes[k]);
-                getWifeBirthday(wifesid[k-1], wifeAndChildren, p);
-                getWifeDeathdate(wifesid[k-1], wifeAndChildren, p);
-                getwifeburied(wifesid[k-1], wifeAndChildren, p);
-                personnum = getChildrenInfo(TreeNUM, personnum, p[wifesid[k-1]].id, wifeAndChildren,p);
+                /**注意这部分代码已不能正常运行，提取每个属性的pattern需自己赋值*/
+                getWifeBirthday(wifesid[k-1], wifeAndChildren, p,pattern);
+                getWifeDeathdate(wifesid[k-1], wifeAndChildren, p,pattern);
+                getwifeburied(wifesid[k-1], wifeAndChildren, p,pattern);
+                personnum = getChildrenInfo(TreeNUM, personnum, p[wifesid[k-1]].id, wifeAndChildren,p,pattern);
             }
             p[personnum] = new People();
             p[personnum].id = personnum+1;
@@ -296,11 +297,12 @@ public class People {
         if(k>0) {
             if(wifes[k-1]<buriedindex) {
                 String wifeAndChildren = wifeinfo.substring(wifes[k-1],buriedindex);
-                getWifeBirthday(wifesid[k-1], wifeAndChildren, p);
-                getWifeDeathdate(wifesid[k-1], wifeAndChildren, p);
-                getwifeburied(wifesid[k-1], wifeAndChildren, p);
+                /**注意这部分代码已不能正常运行，提取每个属性的pattern需自己赋值*/
+                getWifeBirthday(wifesid[k-1], wifeAndChildren, p,pattern);
+                getWifeDeathdate(wifesid[k-1], wifeAndChildren, p,pattern);
+                getwifeburied(wifesid[k-1], wifeAndChildren, p,pattern);
 
-                personnum = getChildrenInfo(TreeNUM, personnum, p[wifesid[k-1]].id, wifeAndChildren, p);
+                personnum = getChildrenInfo(TreeNUM, personnum, p[wifesid[k-1]].id, wifeAndChildren, p,pattern);
             }else {
                 //这里有一个错误
             }
@@ -316,14 +318,14 @@ public class People {
 //		}
         else {
             //无妻子信息
-            personnum = getChildrenInfo(TreeNUM, personnum, -1, wifeinfo, p);
+            personnum = getChildrenInfo(TreeNUM, personnum, -1, wifeinfo, p,pattern);
         }
         return personnum;
     }
     //提取子女信息
-    public int getChildrenInfo(int TreeNUM, int personnum, int imotherid, String childreninfo, People[] p) {
+    public int getChildrenInfo(int TreeNUM, int personnum, int imotherid, String childreninfo, People[] p,String patterns) {
 
-        String patterns = "子[一|二|三|四|五|六|七|八|九|十][^一|二|三|四|五|六|七|八|九|十]";
+//        String patterns = "子[一|二|三|四|五|六|七|八|九|十][^一|二|三|四|五|六|七|八|九|十]";
         Pattern rs = Pattern.compile(patterns);
         Matcher ms = rs.matcher(childreninfo);
         while(ms.find()) {
@@ -489,8 +491,8 @@ public class People {
         return num;
     }
     //妻子出生日期
-    public void getWifeBirthday(int i, String wifeinfo, People[] p) {
-        String pattern = "[同公年|\\S{0,5}年]\\S{1,10}月\\S{1,10}生";
+    public void getWifeBirthday(int i, String wifeinfo, People[] p,String pattern) {
+//        String pattern = "[同公年|\\S{0,5}年]\\S{1,10}月\\S{1,10}生";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(wifeinfo);
         if(m.find()) {
@@ -499,8 +501,8 @@ public class People {
         }
     }
     //妻子过世日期
-    public void getWifeDeathdate(int i, String wifeinfo, People[] p) {
-        String pattern = "\\S{1,4}年\\S{1,15}妣故";
+    public void getWifeDeathdate(int i, String wifeinfo, People[] p,String pattern) {
+//        String pattern = "\\S{1,4}年\\S{1,15}妣故";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(wifeinfo);
         if(m.find()) {
@@ -509,8 +511,8 @@ public class People {
         }
     }
     //妻子葬于
-    public void getwifeburied(int i, String wifeinfo, People[] p) {
-        String pattern = "公\\S{0,5}妣\\S{0,5}葬\\S{1,200} ";
+    public void getwifeburied(int i, String wifeinfo, People[] p,String pattern) {
+//        String pattern = "公\\S{0,5}妣\\S{0,5}葬\\S{1,200} ";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(wifeinfo);
         if(m.find()) {
