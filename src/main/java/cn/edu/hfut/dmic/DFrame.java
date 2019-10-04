@@ -35,10 +35,10 @@ public class DFrame {
         String[] jiapuList = jiapuString.split("\n");
         // 选取用于用户标注的文本
         labelText = dJiaFrame.atrrLabel(jiapuList);
-//        System.out.println("labelText: "+labelText);
+        System.out.println("labelText: "+labelText);
         // 用户标注
         labeledAttrMap = dJiaFrame.userIntelligence(labelText.get("labelString"));
-//        System.out.println("labeledAttrMap: "+labeledAttrMap);
+        System.out.println("labeledAttrMap: "+labeledAttrMap);
         //根据用户标注信息，学习家谱文件规则
         dJiaFrame.ruleLearning(labelText.get("labelString"),labeledAttrMap);
         //家谱人物属性抽取
@@ -133,8 +133,9 @@ public class DFrame {
         System.out.println("请进行标注（连续两次回车表示完成标注）：");
         System.out.println();
         System.out.println();
-        Scanner sc = new Scanner(System.in);
+
         /**从控制台输入*/
+//        Scanner sc = new Scanner(System.in);
 //        str = sc.nextLine(); //读取一行数据
 //        while(str.length()!=0){
 //            if(str.contains(":")){  //英文冒号
